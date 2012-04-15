@@ -1,0 +1,19 @@
+development: &non_production_settings
+  :twitter:
+    :consumer_key: "0mXOM55ipUzvAV08JebU2g"
+    :consumer_secret: "5YVT1udmCtw0H0KCWoNjvQYJJDCCfiUFvMQDJKvJj9Q"
+    :oauth_token: "554366645-jyxCa8aZf0i15zgMobnZiOjvPncBTRpCHBTDlVIY"
+    :oauth_token_secret: "zgO4XbuHQESHBvEbl4nsndmkc1jrpqsJ55IeKz5qyXc"
+  :site:
+    :title: "Mark's Fake Facts"
+    :address: "http://localhost:4567/"
+
+test:
+  <<: *non_production_settings
+
+production:
+  :google_analytics:
+    :api_key: "[Enter Google ID]"
+  :site:
+    :title: "[Title]"
+    :address: "[Address]"
