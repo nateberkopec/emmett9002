@@ -4,12 +4,13 @@ Bundler.setup
 require 'yaml'
 # mark's brain
 require 'twitter'
-require 'gabbler'
+require 'marky_markov'
 require 'sinatra'
 
 ENVIRONMENT = "development"
 raw_config = File.read("config/config.yml")
 APP_CONFIG = YAML.load(raw_config)[ENVIRONMENT]
+dictionary = File.open('config/dictionary.txt', 'a+')
 
 Twitter.configure do |config|
   config.consumer_key = APP_CONFIG[:twitter][:consumer_key]
@@ -19,6 +20,5 @@ Twitter.configure do |config|
 end
 
 #load dictionary
-MARK = Gabbler.new
-@dictionary = File.read('config/dictionary.txt')
-MARK.learn(@dictionary)
+MARK = MarkyMarkov::TemporaryDictionary.new(1)
+MARK.parse_file dictionary

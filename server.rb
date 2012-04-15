@@ -2,6 +2,7 @@ require 'sinatra'
 require 'twitter'
 require 'yaml'
 require 'haml'
+require 'marky_markov'
 require 'gabbler'
 
 get '/' do
@@ -13,10 +14,13 @@ end
 def generate_tweet
 	tweet = false
 	until tweet
-  	candidate = MARK.sentence
-  	if candidate.length < 140 && candidate.length > 80
+    begin
+      candidate = MARK.generate_n_words rand(15)
+    rescue
+      next
+    end
+  	if candidate.length < 140 && candidate.length > 1
   		tweet = candidate
-  		tweet[0].upcase!
   	end
   end
   return tweet

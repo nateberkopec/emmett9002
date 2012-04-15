@@ -1,54 +1,29 @@
 task :environment do
-  require File.expand_path(File.join(*%w[ config environment ]), File.dirname(__FILE__))
+  require File.expand_path(File.join(*%w[ initializer ]), File.dirname(__FILE__))
+  require './server'
 end
 
 task :dictbuild => :environment do
-	require 'rubygems'
-	require 'mechanize'
-	require 'pry'
-
-	agent = Mechanize.new { |agent| agent.user_agent_alias = 'Mac Safari' }
-	page = agent.get('http://en.wikipedia.org/wiki/Wikipedia:Recent_additions')
-
-	fact_links = page.links_with(:href => %r(\/wiki\/Wikipedia:Recent_additions\/\d{4}))
-	fact_links.each do |fact_page|
-
-		facts = []
-
-		#binding.pry
-		page = agent.get "http://en.wikipedia.org" + fact_page.href
-		facts = page.search("#bodyContent .mw-content-ltr ul li")
-
-		dictionary = []
-
-
-		facts.each do |fact|
-			fact = fact.content
-			next unless fact['...'] && !fact['Did you know'] && !fact['Wikinews']
-			fact.gsub!("... that ","")
-			fact.gsub!("...that ","")
-			fact.chop!
-			fact.gsub!(/\(.+\)/,"")
-			dictionary.push(fact)
-		end
-
-
-	  File.open('config/dictionary.txt', 'a') do |f|
-	  	dictionary.each do |fact|
-	  		f.puts(fact)
-	  	end
-	  end
-	end
+  (0..60).each do |i|
+  	tweets = Twitter.user_timeline("emmett9001", {:count => 200,
+  																							 :include_rts => false, 
+  																							 :include_entities => false, 
+  																							 :exclude_replies => true, 
+  																							 :page => i})
+  	dictionary = []
+  	tweets.each do |tweet|
+      sanitized = tweet.text.gsub(/(?:http|https):\/\/[a-z0-9]+(?:[\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(?:(?::[0-9]{1,5})?\/[^\s]*)?/ix, "")
+  		dictionary.push sanitized
+  	end
+  	
+    File.open('config/dictionary.txt', 'a+') do |f|
+    	dictionary.each do |tweet|
+    		f.puts(tweet)
+    	end
+    end
+  end
 end
 
 task :tweet => :environment do
-	@tweet = false
-	until @tweet
-  	candidate = MARK.sentence
-  	if candidate.length < 140 && candidate.length > 80
-  		@tweet = candidate
-  	end
-  end
-  @tweet[0] = @tweet[0].upcase
-  Twitter.update(@tweet)
+  Twitter.update(generate_tweet)
 end
