@@ -25,7 +25,7 @@ task :dictbuild => :environment do
 end
 
 task :tweet => :environment do
-  tweet = generate_tweet(rand(7))
+  tweet = generate_tweet(rand(11))
   puts tweet
   Twitter.update(tweet)
 end
