@@ -22,3 +22,5 @@ end
 #load dictionary
 MARK = MarkyMarkov::TemporaryDictionary.new(1)
 MARK.parse_file dictionary
+DARK = MarkyMarkov::TemporaryDictionary.new
+DARK.parse_file 'config/blogposts.txt'
