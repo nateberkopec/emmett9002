@@ -25,7 +25,9 @@ task :dictbuild => :environment do
 end
 
 task :tweet => :environment do
-  tweet = generate_tweet(rand(11))
-  puts tweet
-  Twitter.update(tweet)
+  if rand(2) == 0 #hack to get around not scheduling every hour
+    tweet = generate_tweet(rand(11))
+    puts tweet
+    Twitter.update(tweet)
+  end
 end
