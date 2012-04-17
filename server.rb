@@ -7,20 +7,27 @@ require 'gabbler'
 
 get '/' do
 	# show some generic stuff, documentation about mark, last tweet, etc
-	@tweet = generate_tweet(rand(11))
+	@tweet = generate_tweet
   haml :index
 end
 
-def generate_tweet(mode)
-	case mode
+def generate_tweet
+	case rand(16)
   when 0
+    puts "sentence"
     return sentence_mode
   when 1..5
+    puts "word"
     return word_mode
   when 6
+    puts "TOURETTES"
     return tourettes_mode
   when 7..10
+    puts 'blog'
     return blog_mode
+  when 11..15
+    puts 'haiku'
+    return haiku_mode
   end
 end
 
@@ -89,5 +96,29 @@ def blog_mode
   end
   return tweet
 end
+
+def haiku_mode
+  tweet = false
+  until tweet
+    candidate = ""
+    begin
+      candidate = case rand(3)
+      when 0
+        DARK.generate_n_words rand(2) + 2
+      when 1
+        MARK.generate_n_words rand(2) + 2
+      when 2
+        DARK.generate_1_word + " " + MARK.generate_1_word
+      end
+    rescue
+      nil
+    end
+    if candidate.length < 140 && candidate.length > 1
+      tweet = candidate
+    end
+  end
+  return tweet
+end
+
 
 
