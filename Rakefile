@@ -26,7 +26,7 @@ end
 
 task :tweet => :environment do
   if rand(2) == 0 #hack to get around not scheduling every hour
-    tweet = generate_tweet(rand(11))
+    tweet = generate_tweet
     puts tweet
     Twitter.update(tweet)
   end
