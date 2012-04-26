@@ -12,7 +12,7 @@ get '/' do
 end
 
 def generate_tweet
-  case rand(13)
+  case rand(16)
   when 0..1
     puts "TOURETTES"
     return tourettes_mode
@@ -25,6 +25,9 @@ def generate_tweet
   when 11..12
     puts 'dear self'
     return schizo_mode
+  when 13..15
+    puts 'entity'
+    return entity_replacement
   end
 end
 
