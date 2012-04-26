@@ -25,9 +25,7 @@ task :dictbuild => :environment do
 end
 
 task :tweet => :environment do
-  if rand(2) == 0 #hack to get around not scheduling every hour
-    tweet = generate_tweet
-    puts tweet
-    Twitter.update(tweet)
+  if Time.now.hour % 3 == 0 
+    Twitter.update(generate_tweet)
   end
 end
