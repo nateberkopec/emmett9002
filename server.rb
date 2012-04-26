@@ -5,12 +5,6 @@ require 'haml'
 require 'marky_markov'
 require 'gabbler'
 
-get '/' do
-	# show some generic stuff, documentation about mark, last tweet, etc
-	@tweet = generate_tweet
-  haml :index
-end
-
 def generate_tweet
   case rand(16)
   when 0..1
@@ -32,70 +26,59 @@ def generate_tweet
 end
 
 def tourettes_mode
-  tweet = false
-  until tweet
-    begin
-      candidate = MARK.generate_n_words rand(3)
-    rescue
-      next
-    end
-    if candidate.length < 140 && candidate.length > 1 && candidate != candidate.upcase
-      tweet = candidate.upcase
-    end
+  candidate = MARK.generate_n_words rand(3)
+  if (1..140) === candidate.length && candidate != candidate.upcase
+    tweet = candidate.upcase
+  else
+    tourettes_mode
   end
-  return tweet
 end
 
 def blog_mode
-  tweet = false
-  until tweet
-    candidate = ""
-    begin
-      rand(4).times do
-        candidate += DARK.generate_n_words rand(3) + 1
-        candidate += " "
-        candidate += MARK.generate_n_words rand(3) + 1
-        candidate += " "
-      end
-    rescue
-      nil
+  candidate = ""
+  begin
+    rand(4).times do
+      candidate += DARK.generate_n_words rand(3) + 1
+      candidate += " "
+      candidate += MARK.generate_n_words rand(3) + 1
+      candidate += " "
     end
-    if candidate.length < 140 && candidate.length > 1
-      tweet = candidate
-    end
+  rescue
+    nil
   end
-  return tweet
+  if (1..140) === candidate.length
+    tweet = candidate
+  else
+    blog_mode
+  end
 end
 
 def haiku_mode
-  tweet = false
-  until tweet
-    candidate = ""
-    begin
-      candidate = case rand(3)
-      when 0
-        DARK.generate_n_words rand(2) + 2
-      when 1
-        MARK.generate_n_words rand(2) + 2
-      when 2
-        DARK.generate_1_word + " " + MARK.generate_1_word
-      end
-    rescue
-      nil
+  begin
+    candidate = case rand(3)
+    when 0
+      DARK.generate_n_words rand(2) + 2
+    when 1
+      MARK.generate_n_words rand(2) + 2
+    when 2
+      DARK.generate_1_word + " " + MARK.generate_1_word
     end
-    if candidate.length < 140 && candidate.length > 1
-      tweet = candidate
-    end
+  rescue
+    nil
   end
-  return tweet
+  if (1..140) === candidate.length
+    tweet = candidate
+  else
+    haiku_mode
+  end
 end
 
 def schizo_mode
   candidate = case rand(2)
   when 0
-    "@emmett9001 dear me: " + haiku_mode
+    "@emmett9001 dear me: " + generate_tweet
   when 1
-    "@emmett9002 dear me: " + haiku_mode
+    "@emmett9002 dear me: " + generate_tweet
   end
   if (1..140) === candidate.length
     return candidate
@@ -105,18 +88,19 @@ def schizo_mode
 end
 
 def entity_replacement
-  candidate = DARK.generate_1_sentence.split
+  candidate = DARK.generate_1_sentence
   changed_count = 0
 
-  candidate.each do |word|
-    if word.capitalize == word && candidate.index(word) != 0
-      candidate[candidate.index(word)] = generate_entity
+  candidate = candidate.split.inject do |sentence, word|
+    if word.capitalize == word
+      word = generate_entity
       changed_count += 1
     end
+    sentence << " " + word
   end
 
-  if (1..90) === candidate.join.length && (1..2) === changed_count
-    return candidate.join(" ")
+  if (1..90) === candidate.length && (1..2) === changed_count
+    return candidate
   else
     entity_replacement
   end
@@ -124,10 +108,9 @@ end
 
 def generate_entity
   candidate = MARK.generate_1_word
-  if candidate.capitalize == candidate
+  if candidate.upcase != candidate && !ENGLISH.include?(candidate.downcase)
     return candidate
   else
     generate_entity
   end
 end
-

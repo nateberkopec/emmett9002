@@ -19,8 +19,10 @@ Twitter.configure do |config|
   config.oauth_token_secret = APP_CONFIG[:twitter][:oauth_token_secret]
 end
 
-#load dictionary
+#load dictionaries
 MARK = MarkyMarkov::TemporaryDictionary.new(1)
 MARK.parse_file dictionary
 DARK = MarkyMarkov::TemporaryDictionary.new
 DARK.parse_file 'config/blogposts.txt'
+raw_english = File.open('config/english.yaml')
+ENGLISH = YAML.load(raw_english)
