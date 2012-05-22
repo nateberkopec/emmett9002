@@ -6,7 +6,7 @@ require 'marky_markov'
 require 'gabbler'
 
 def generate_tweet
-  case rand(16)
+  case rand(17)
   when 0..1
     puts "TOURETTES"
     return tourettes_mode
