@@ -26,3 +26,4 @@ DARK = MarkyMarkov::TemporaryDictionary.new
 DARK.parse_file 'config/blogposts.txt'
 raw_english = File.open('config/english.yaml')
 ENGLISH = YAML.load(raw_english)
+FUNNY_SHIT = *File.open('config/funny_words.txt')

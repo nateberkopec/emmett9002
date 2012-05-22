@@ -10,19 +10,20 @@ def generate_tweet
   when 0..1
     puts "TOURETTES"
     return tourettes_mode
-  when 2..6
+  when 2..9
     puts 'blog'
     return blog_mode
-  when 7..10
+  when 10..12
     puts 'haiku'
     return haiku_mode
-  when 11..12
-    puts 'dear self'
-    return schizo_mode
   when 13..15
     puts 'entity'
     return entity_replacement
+  when 16
+    puts 'funny shit'
+    return funny_shit
   end
+
 end
 
 def tourettes_mode
@@ -73,20 +74,6 @@ def haiku_mode
   end
 end
 
-def schizo_mode
-  candidate = case rand(2)
-  when 0
-    "@emmett9001 dear me: " + generate_tweet
-  when 1
-    "@emmett9002 dear me: " + generate_tweet
-  end
-  if (1..140) === candidate.length
-    return candidate
-  else
-    schizo_mode
-  end
-end
-
 def entity_replacement
   candidate = DARK.generate_1_sentence
   changed_count = 0
@@ -113,4 +100,27 @@ def generate_entity
   else
     generate_entity
   end
+
+end
+
+def funny_shit
+  begin
+    candidate = case rand(2)
+    when 0
+      MARK.generate_1_word + " " + gimme_shit
+    when 1
+      gimme_shit + " " + MARK.generate_1_word
+    end
+  rescue
+    nil
+  end
+  if (1..140) === candidate.length
+    tweet = candidate
+  else
+    funny_shit
+  end
+end
+
+def gimme_shit
+  FUNNY_SHIT[rand(FUNNY_SHIT.length)].strip
 end
