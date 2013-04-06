@@ -13,12 +13,9 @@ require 'gabbler'
 require 'yaml'
 require 'securerandom'
 
-ENVIRONMENT = ENV['RACK_ENV']
-APP_CONFIG = YAML.load(File.read("config/config.yml"))[ENVIRONMENT]
-
 Twitter.configure do |config|
-  config.consumer_key = APP_CONFIG[:twitter][:consumer_key]
-  config.consumer_secret = APP_CONFIG[:twitter][:consumer_secret]
-  config.oauth_token = APP_CONFIG[:twitter][:oauth_token]
-  config.oauth_token_secret = APP_CONFIG[:twitter][:oauth_token_secret]
+  config.consumer_key = ENV['TWITTER_CONSUMER_KEY']
+  config.consumer_secret = ENV['TWITTER_CONSUMER_SECRET']
+  config.oauth_token = ENV['TWITTER_OAUTH_TOKEN']
+  config.oauth_token_secret = ENV['TWITTER_OAUTH_TOKEN_SECRET']
 end
