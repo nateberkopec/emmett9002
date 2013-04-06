@@ -1,4 +1,4 @@
-source :rubygems
+source 'https://rubygems.org'
 gem 'sinatra', :git => "git://github.com/sinatra/sinatra.git"
 
 gem 'marky_markov'
@@ -8,5 +8,5 @@ gem 'haml'
 gem 'twitter'
 gem 'mechanize'
 gem 'nokogiri'
-gem 'tux'
 gem 'gabbler'
+gem 'dotenv'

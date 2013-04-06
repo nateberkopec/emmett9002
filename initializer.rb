@@ -1,16 +1,20 @@
 require "rubygems"
-require "bundler"
-Bundler.setup
-require 'yaml'
-# mark's brain
-require 'twitter'
-require 'marky_markov'
-require 'sinatra'
+require "bundler/setup"
 
-ENVIRONMENT = "development"
-raw_config = File.read("config/config.yml")
-APP_CONFIG = YAML.load(raw_config)[ENVIRONMENT]
-dictionary = File.open('config/dictionary.txt', 'a+')
+require 'dotenv'
+Dotenv.load
+
+require 'sinatra'
+require 'marky_markov'
+require 'haml'
+require 'twitter'
+require 'nokogiri'
+require 'gabbler'
+require 'yaml'
+require 'securerandom'
+
+ENVIRONMENT = ENV['RACK_ENV']
+APP_CONFIG = YAML.load(File.read("config/config.yml"))[ENVIRONMENT]
 
 Twitter.configure do |config|
   config.consumer_key = APP_CONFIG[:twitter][:consumer_key]
@@ -18,12 +22,3 @@ Twitter.configure do |config|
   config.oauth_token = APP_CONFIG[:twitter][:oauth_token]
   config.oauth_token_secret = APP_CONFIG[:twitter][:oauth_token_secret]
 end
-
-#load dictionaries
-MARK = MarkyMarkov::TemporaryDictionary.new(1)
-MARK.parse_file dictionary
-DARK = MarkyMarkov::TemporaryDictionary.new
-DARK.parse_file 'config/blogposts.txt'
-raw_english = File.open('config/english.yaml')
-ENGLISH = YAML.load(raw_english)
-FUNNY_SHIT = *File.open('config/funny_words.txt')
