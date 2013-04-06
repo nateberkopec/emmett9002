@@ -4,7 +4,7 @@ task :environment do
 end
 
 task :dictbuild => :environment do
-  (0..66).each do |i|
+  (0..80).each do |i|
   	tweets = Twitter.user_timeline("emmett9001", {:count => 200,
   																							 :include_rts => false, 
   																							 :include_entities => false, 
