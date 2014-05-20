@@ -1,10 +1,10 @@
 source 'https://rubygems.org'
-gem 'sinatra', :git => "git://github.com/sinatra/sinatra.git"
+gem 'sinatra'
 
 gem 'marky_markov'
 
 # other dependencies
-gem 'haml'                    
+gem 'haml'
 gem 'twitter'
 gem 'mechanize'
 gem 'nokogiri'

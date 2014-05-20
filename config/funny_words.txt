@@ -10,7 +10,7 @@ MVC
 library
 shoelacestrap
 kickstart
-responsive 
+responsive
 app
 architecture
 backbone
@@ -33,7 +33,6 @@ shonen
 anime
 final
 gohan
-MangaDB
 kawaii
 fuck
 shit
@@ -46,10 +45,8 @@ bitch
 damn
 dammit
 wololo
-wololo
 suck
 balls
 boner
-gay
 sniper
 
