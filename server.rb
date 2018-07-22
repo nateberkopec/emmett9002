@@ -25,7 +25,7 @@ class Emmett
   def tourettes_mode
     candidate = @mark.generate_n_words rand(3)
     if (1..140) === candidate.length && candidate != candidate.upcase
-      tweet = candidate.upcase
+      candidate.upcase
     else
       tourettes_mode
     end
@@ -35,7 +35,7 @@ class Emmett
     candidate = (@mark.generate_n_words rand(1) + 1) + " " + (@mark.generate_n_words rand(1) + 1)
     candidate.split(" ").shuffle.join(" ")
     if (1..140) === candidate.length
-      tweet = candidate
+      candidate
     else
       haiku_mode
     end
